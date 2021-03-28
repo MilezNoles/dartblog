@@ -10,7 +10,7 @@ title, slug
 
 Post
 -------------
-title, slug, author, context, created_at, photo, views, category, 
+title, slug, author, content, created_at, photo, views, category, 
 '''
 
 class Category(models.Model):
@@ -22,7 +22,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name = "Категория"
-        verbose_name_plural = "Категории"
+        verbose_name_plural = "Категорий"
         ordering = ["title"]
 
 
@@ -44,7 +44,7 @@ class Post(models.Model):
     title = models.CharField(max_length=255, verbose_name="Заголовок",)
     slug = models.SlugField(max_length=255, verbose_name="Url", unique=True)
     author = models.CharField(max_length=100, verbose_name="Автор", )
-    context = models.TextField(blank=True, verbose_name="Контекст", )
+    content = models.TextField(blank=True, verbose_name="Содержимое", )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", )
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", blank=True, verbose_name="Фото", )
     views = models.IntegerField(default=0, verbose_name="Количество просмотров", )
