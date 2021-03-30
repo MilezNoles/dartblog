@@ -25,7 +25,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ("category",)
 
     readonly_fields = ("views", "created_at", "get_photo", )  # поля которые будут только для чтения
-    fields =("title","slug", "category","tags", "content", "photo", "get_photo","views", "created_at","is_main")
+    fields =("title","slug", "category","tags","author", "content", "photo", "get_photo","views", "created_at","is_main")
 
 
     def get_photo(self, obj):
