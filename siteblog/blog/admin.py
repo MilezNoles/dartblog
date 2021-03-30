@@ -18,14 +18,14 @@ class PostAdmin(admin.ModelAdmin):
     save_as = True
     save_on_top = True  # кнопки сохранить будут и вверху
     list_display = (
-        "id", "title","slug", "category", "created_at", "get_photo")  # столбцы в админке
+        "id", "title","slug", "category", "created_at", "get_photo","is_main")  # столбцы в админке
     list_display_links = ("id", "title")  # что будет ссылкой на редактирование в админке
     search_fields = ("title",)  # search in admin
-    list_editable = ("category",)
+    list_editable = ("category","is_main",)
     list_filter = ("category",)
 
     readonly_fields = ("views", "created_at", "get_photo", )  # поля которые будут только для чтения
-    fields =("title","slug", "category","tags", "content", "photo", "get_photo","views", "created_at",)
+    fields =("title","slug", "category","tags", "content", "photo", "get_photo","views", "created_at","is_main")
 
 
     def get_photo(self, obj):

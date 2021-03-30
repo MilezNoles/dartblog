@@ -14,6 +14,8 @@ class Home(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
         context["title"] = "Blog Design"
+        context["main"] = Post.objects.get(is_main=True)
+
         return context
 
 

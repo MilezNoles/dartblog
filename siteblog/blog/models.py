@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.urls import reverse_lazy
 
 '''
@@ -55,12 +55,20 @@ class Post(models.Model):
     views = models.IntegerField(default=0, verbose_name="Количество просмотров", )
     category = models.ForeignKey(Category, on_delete=models.PROTECT,related_name="posts", verbose_name="Категория", )
     tags  = models.ManyToManyField(Tag, blank=True, related_name="posts", verbose_name="Тэг",)
+    is_main = models.BooleanField(default=False, verbose_name="На главной?")
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):  # для ссылок
         return reverse_lazy("post", kwargs={"slug": self.slug, })
+
+    @transaction.atomic  #для того чтобы в is_main был только один True
+    def save(self, *args, **kwargs):
+        if self.is_main:
+            Post.objects.filter(
+                is_main=True).update(is_main=False)
+        super(Post, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Пост"
