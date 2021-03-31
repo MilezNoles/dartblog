@@ -77,3 +77,22 @@ class Post(models.Model):
         verbose_name = "Post"
         verbose_name_plural = "Posts"
         ordering = ["-created_at"]
+
+
+class Comments(models.Model):
+    username = models.CharField(max_length=50, verbose_name="Username", )  # обязательный атрибут - длина
+    comment = models.TextField(verbose_name="Comment")  # по умолчанию пустой
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата публикации")  # про создании новости
+    # поставится не изменяемая дата и время,которые будут взяты в момент создания
+    # фото будут сохраняться в папке фото/год.месяц.день
+
+    # def get_absolute_url(self):  # для ссылок
+    #     return reverse_lazy("comments")
+
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        verbose_name = "Comment"  # имя в админке ед число
+        verbose_name_plural = "Comments"
+        ordering = ["created_at"]

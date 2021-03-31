@@ -1,29 +1,39 @@
 {% load menu %}
 <header class="header">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="logo">
-                            <h2><a href="{% url 'home' %}">Blog</a></h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1">
+                <div class="logo">
+                    <h2><a href="{% url 'home' %}">Blog</a></h2>
+                </div>
+            </div>
+            <div class="col-md-8">
+
+                {% show_menu %}
+
+            </div>
+            <div class="col-md-3">
+
+                <div class="logo">
+                    <div class="row">
+                        {%if request.user.is_authenticated %}
+                        <div class="col-md-4">
+                            <h2 style="font-size:25px;font-weight:600">Welcome, {{user.username}}</h2>
                         </div>
-                    </div>
-                    <div class="col-md-8">
-
-                        {% show_menu %}
-
-                    </div>
-                    <div class="col-md-2">
-                        <div class="logo">
-                            {%if request.user.is_authenticated %}
-                            <h2>Welcome, {{user.username}}</h2>
+                        <div class="col-md-4">
                             <h2><a href="{% url 'logout' %}">Logout</a></h2>
-                            {%else%}
-                            <h2><a href="{% url 'register' %}">Register</a></h2>
-
-                            <h2><a href="{% url 'login' %}">Login</a></h2>
-                            {%endif%}
                         </div>
+                        {%else%}
+                        <div class="col-md-4">
+                            <h2><a href="{% url 'register' %}">Register</a></h2>
+                        </div>
+                        <div class="col-md-4">
+                            <h2><a href="{% url 'login' %}">Login</a></h2>
+                        </div>
+                        {%endif%}
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
+    </div>
+</header>

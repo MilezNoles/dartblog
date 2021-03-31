@@ -49,10 +49,16 @@ class CategoryAdmin(admin.ModelAdmin):
         "id", "title", "slug",)  # столбцы в админке
     list_display_links = ("id", "title")  # что будет ссылкой на редактирование в админке
 
+class CommentsAdmin(admin.ModelAdmin):
+    list_display = (
+        "id", "username", "created_at")  # столбцы в админке
+    list_display_links = ("id", "username")  # что будет ссылкой на редактирование в админке
+
 
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
+admin.site.register(Comments, CommentsAdmin)
 
 

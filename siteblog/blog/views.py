@@ -97,6 +97,7 @@ class GetPost(DetailView):
         self.object.views = F("views") + 1
         self.object.save()
         self.object.refresh_from_db()
+        context["comments"] = Comments.objects.all()
         return context
 
 
