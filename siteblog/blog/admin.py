@@ -34,7 +34,7 @@ class PostAdmin(admin.ModelAdmin):
         else:
             return " - "
 
-    get_photo.short_description = "Миниатюра"  # Меняем вывод Getphoto в столбце админки на Миниатюра
+    get_photo.short_description = "Preview"  # Меняем вывод Getphoto в столбце админки на Preview
 
 
 class TagAdmin(admin.ModelAdmin):

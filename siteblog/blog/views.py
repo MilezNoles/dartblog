@@ -1,7 +1,54 @@
-from django.shortcuts import render
+from django.contrib.auth import login, logout
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, DetailView
 
+from blog.forms import *
 from blog.models import *
+from django.db.models import F
+
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserRegister(request.POST)  # связь формы с данными
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("home")
+
+
+    else:
+        form = UserRegister()
+
+    context = {
+        "form": form,
+    }
+    return render(request, "blog/register.html", context)
+
+
+def user_login(request):
+    if request.method == "POST":
+        form = UserLogin(data=request.POST)  # для логина обязательна data=
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+
+            return redirect("home")
+
+
+
+    else:
+        form = UserLogin()
+
+    context = {
+        "form": form,
+    }
+    return render(request, "blog/login.html", context)
+
+
+def user_logout(request):
+    logout(request)
+    return redirect("login")
 
 
 class Home(ListView):
@@ -37,14 +84,21 @@ class PostsByCategory(ListView):
         return context
 
 
+class PostsByTag(ListView):
+    pass
+
+class GetPost(DetailView):
+    model = Post
+    template_name = "blog/single.html"
+    context_object_name = "post"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object.views = F("views") + 1
+        self.object.save()
+        self.object.refresh_from_db()
+        return context
 
 
-
-
-def get_category(request, slug):
-    return render(request, 'blog/category.html')
-
-def get_post(request, slug):
-    return render(request, 'blog/category.html')
 
 

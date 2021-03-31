@@ -21,11 +21,17 @@
 <body>
     <div class="wrapper">
 
-        {% cache 60 header %}
-        {%include "inc/_header.html"%}
-        {% endcache %}
 
-        {% block content %} {% endblock %}
+        {%include "inc/_header.html"%}
+
+
+
+
+                {% block content %} {% endblock %}
+
+
+
+
         {% cache 60 footer %}
         {%include "inc/_footer.html"%}
         {% endcache %}
