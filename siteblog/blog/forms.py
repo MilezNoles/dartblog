@@ -4,6 +4,7 @@ import re  # для clean_title
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 # from captcha.fields import CaptchaField
 
@@ -33,6 +34,7 @@ class UserRegister(UserCreationForm):
     password2 = forms.CharField(label="Confirm password",
                                 widget=forms.PasswordInput(attrs={'class': "form-control", }))
 
+
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
@@ -44,15 +46,15 @@ class UserRegister(UserCreationForm):
         # } для UserCreationForm это поле работает не корректно, поэтому все переносим из меты в UserRegister
 
 
-# class CommentsForm(forms.ModelForm):
-#     class Meta:
-#         model = Comments
-#         fields = ["nickname", "message", ]
-#         widgets = {
-#             "nickname": forms.TextInput(attrs={'class': "form-control", "type": "hidden"}, ),
-#             "message": forms.Textarea(attrs={
-#                 'class': "form-control",
-#                 'rows': 5
-#             }),
-#
-#         }
+class CommentsForm(forms.ModelForm):
+    class Meta:
+        model = Comments
+        fields = ["username", "comment", ]
+        widgets = {
+            "username": forms.TextInput(attrs={'class': "name", "placeholder": "Name"}, ),      # "type": "hidden"
+            "comment": forms.Textarea(attrs={
+                "placeholder": "Comment",
+                'class': "comment",
+            }),
+
+        }

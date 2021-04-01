@@ -1,5 +1,6 @@
 from django.db import models, transaction
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 
 '''
 Category
@@ -81,13 +82,13 @@ class Post(models.Model):
 
 class Comments(models.Model):
     username = models.CharField(max_length=50, verbose_name="Username", )  # обязательный атрибут - длина
+
     comment = models.TextField(verbose_name="Comment")  # по умолчанию пустой
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата публикации")  # про создании новости
     # поставится не изменяемая дата и время,которые будут взяты в момент создания
     # фото будут сохраняться в папке фото/год.месяц.день
 
-    # def get_absolute_url(self):  # для ссылок
-    #     return reverse_lazy("comments")
+
 
     def __str__(self):
         return self.username

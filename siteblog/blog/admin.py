@@ -22,7 +22,7 @@ class PostAdmin(admin.ModelAdmin):
     list_display_links = ("id", "title")  # что будет ссылкой на редактирование в админке
     search_fields = ("title",)  # search in admin
     list_editable = ("category","is_main",)
-    list_filter = ("category",)
+    list_filter = ("category","tags")
 
     readonly_fields = ("views", "created_at", "get_photo", )  # поля которые будут только для чтения
     fields =("title","slug", "category","tags","author", "content", "photo", "get_photo","views", "created_at","is_main")

@@ -1,6 +1,7 @@
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, DetailView
+from django.contrib.auth.models import User
 
 from blog.forms import *
 from blog.models import *
@@ -15,7 +16,6 @@ def register(request):
             user = form.save()
             login(request, user)
             return redirect("home")
-
 
     else:
         form = UserRegister()
@@ -85,7 +85,23 @@ class PostsByCategory(ListView):
 
 
 class PostsByTag(ListView):
-    pass
+    template_name = "blog/category.html"
+    context_object_name = "posts"
+    paginate_by = 4
+    allow_empty = False
+
+
+    def get_queryset(self):
+        return Post.objects.filter(tags__slug=self.kwargs["slug"])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] ="All posts by tag: " + str(Tag.objects.get(slug=self.kwargs["slug"]))
+        return context
+
+
+
+
 
 class GetPost(DetailView):
     model = Post
@@ -101,5 +117,34 @@ class GetPost(DetailView):
         return context
 
 
+# class PersonalPage(DetailView):
+#     model = Post
+#     template_name = "blog/personal.html"
+#     context_object_name = "post"
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         self.object.views = F("views") + 1
+#         self.object.save()
+#         self.object.refresh_from_db()
+#         context["user"] = User.objects.get(pk=self.kwargs["pk"])
+#         return context
+#
+#     def get_queryset(self):
+#         user = User.objects.get(pk=self.kwargs["pk"])
+#         print(user.username)
+#         return Post.objects.filter(author=user.username, )
 
 
+class Search(ListView):
+    template_name = "blog/search.html"
+    context_object_name = "posts"
+    paginate_by = 4
+
+    def get_queryset(self):
+        return Post.objects.filter(title__icontains=self.request.GET.get("s"))
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["s"] = f"s={self.request.GET.get('s')}&"
+        return context

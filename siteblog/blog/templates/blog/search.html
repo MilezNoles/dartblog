@@ -2,30 +2,20 @@
 {% load static %}
 
 
-{% block title%} {{title}} :: {{block.super}} {% endblock%}
+{% block title%} Search :: {{block.super}} {% endblock%}
 {% block content %}
 
 
-<section class="bg-text-area">
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-
-                <div class="bg-text">
-
-                    <h3>{{title}}</h3>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <section class="blog-post-area">
     <div class="container">
+        <div style="border-top: 1px solid #40c4ff;"></div>
         <div class="row">
             <div class="blog-post-area-style">
+                <div class="col-md-12">
+
+                </div>
 
                 {% for p in posts %}
                 <div class="col-md-3">
@@ -44,6 +34,9 @@
                         <h4><span>{{ p.created_at | date:"j E Y" }}</span></h4>
                     </div>
                 </div>
+
+                {% empty %}
+                <p>Your search did not match any documents.</p>
                 {% endfor %}
 
 
