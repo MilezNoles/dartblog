@@ -58,3 +58,10 @@ class CommentsForm(forms.ModelForm):
             }),
 
         }
+
+
+    def clean_username(self):  # валидатор для title
+        username = self.cleaned_data["username"]
+        if re.match(r"\d", username):  # \d цифра
+            raise ValidationError("Ник не должен начинаться с цифры")
+        return username

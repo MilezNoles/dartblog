@@ -114,6 +114,7 @@ class GetPost(DetailView):
         self.object.save()
         self.object.refresh_from_db()
         context["comments"] = Comments.objects.all()
+        print(context)
         return context
 
 
@@ -152,20 +153,43 @@ class Search(ListView):
 
 class AddComments(CreateView):
     form_class = CommentsForm
-    template_name = "blog/index.html"
+    template_name = "blog/single.html"
 
 
+
+    # def get_initial(self):
+    #     initial = super(AddComments, self).get_initial()
+    #     initial.update({"username": self.request.user.username})
+    #     return initial
+
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     prev_page = self.request.META.get('HTTP_REFERER')
+    #
+    #     context["s"] =
+    #     return context
 
     def form_valid(self, form):
         redirect = self.request.META.get('HTTP_REFERER')   # to previous page
         if redirect:
             redirect += "#comment"      # to anchor
             self.success_url = redirect
-            print(redirect)
         return super(AddComments, self).form_valid(form)
 
+    # def form_invalid(self, form):                           not working -------fix later
+    #     print("form invalid")
+    #     print(super(AddComments, self).form_invalid(form))
+    #     redirect = self.request.META.get('HTTP_REFERER')  # to previous page
+    #     print(form)
+    #
+    #     if redirect:
+    #         redirect += "#comment"  # to anchor
+    #         self.unsuccess_url = redirect
+    #         print(redirect)
+    #
+    #     return super(AddComments, self).form_invalid(form)
 
-    # def get_initial(self):
-    #     initial = super(AddComments, self).get_initial()
-    #     initial.update({"nickname": self.request.user.username})
-    #     return initial
+
+
+
+

@@ -14,11 +14,16 @@ def add_comments(context):
     request = context['request']
     if request.method == 'POST':
         form = CommentsForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return {
-        "form": form,
-    }
+        # if form.is_valid():
+        #     form.save()
+        # else:
+        #     redirect("post")
+        #
+        # context = {
+        #     "form": form,
+        # }
+        # return context
+
 
     else:
         form = CommentsForm()
