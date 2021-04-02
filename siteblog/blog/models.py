@@ -93,6 +93,8 @@ class Comments(models.Model):
     def __str__(self):
         return self.username
 
+
+
     class Meta:
         verbose_name = "Comment"  # имя в админке ед число
         verbose_name_plural = "Comments"

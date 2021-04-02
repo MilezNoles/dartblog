@@ -148,3 +148,24 @@ class Search(ListView):
         context = super().get_context_data(**kwargs)
         context["s"] = f"s={self.request.GET.get('s')}&"
         return context
+
+
+class AddComments(CreateView):
+    form_class = CommentsForm
+    template_name = "blog/index.html"
+
+
+
+    def form_valid(self, form):
+        redirect = self.request.META.get('HTTP_REFERER')   # to previous page
+        if redirect:
+            redirect += "#comment"      # to anchor
+            self.success_url = redirect
+            print(redirect)
+        return super(AddComments, self).form_valid(form)
+
+
+    # def get_initial(self):
+    #     initial = super(AddComments, self).get_initial()
+    #     initial.update({"nickname": self.request.user.username})
+    #     return initial

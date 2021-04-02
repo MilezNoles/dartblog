@@ -16,7 +16,9 @@ def add_comments(context):
         form = CommentsForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect("post")
+        return {
+        "form": form,
+    }
 
     else:
         form = CommentsForm()

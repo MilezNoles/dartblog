@@ -20,6 +20,7 @@
                                 <h2>{{post.title}}</h2>
                                 <div class="for-style">
                                     <div>
+
                                         <span style="font-size:25px;font-weight:bold">Category: <a href="{{ post.category.get_absolute_url }}">{{ post.category }}</a></span>
                                         <br>
                                         <br>
@@ -83,7 +84,7 @@
                                 </ul>
 
                             </div>
-
+                            <a name="comment"></a>
                         {% add_comments %}
 
 
