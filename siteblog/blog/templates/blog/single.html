@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load sidebar %}
+{% load comment %}
 
 
 
@@ -82,20 +83,10 @@
                                 </ul>
 
                             </div>
-                            <form action="#" method="get">
-                                <div class="name">
-                                    <input type="text" name="" id="" placeholder="Name" class="name">
-                                </div>
-                                <div class="email">
-                                    <input type="email" name="" id="" placeholder="Email" class="email">
-                                </div>
-                                <div class="comment">
-                                    <input type="text" name="" id="" placeholder="Comment" class="comment">
-                                </div>
-                                <div class="post">
-                                    <input type="submit" value="Post">
-                                </div>
-                            </form>
+
+                        {% add_comments %}
+
+
                         </div>
                     </div>
                     <div class="col-md-4">

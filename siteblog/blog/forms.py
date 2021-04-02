@@ -52,7 +52,7 @@ class CommentsForm(forms.ModelForm):
         fields = ["username", "comment", ]
         widgets = {
             "username": forms.TextInput(attrs={'class': "name", "placeholder": "Name"}, ),      # "type": "hidden"
-            "comment": forms.Textarea(attrs={
+            "comment": forms.TextInput(attrs={
                 "placeholder": "Comment",
                 'class': "comment",
             }),

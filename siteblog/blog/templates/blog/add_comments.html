@@ -1,0 +1,16 @@
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="name">
+        {{ form.username.errors }}
+        {{ form.username }}
+    </div>
+
+    <div class="comment">
+        {{ form.comment.errors }}
+        {{ form.comment }}
+    </div>
+    <div class="post">
+        <input type="submit" value="Post">
+    </div>
+</form>
