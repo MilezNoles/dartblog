@@ -6,8 +6,61 @@
     
     @media (min-width: 768px) and (max-width: 991px) {}
     
-    @media (min-width: 550px) and (max-width: 767px) {}
+    @media (min-width: 550px) and (max-width: 767px) {
+    section.blog-post-area .big-text {
+    float: right;
+    width: 100%;
+    padding-right: 10px;
+    }
+
+    section.blog-post-area .big-image {
+    float: left;
+    width: 100%;
+    padding-right: 10px;
+    }
+
+
+
+    .wrapper section.bg-text-area .bg-text {
+    background-image: url(img/bg-iamges.jpg);
+    padding: 20px 28px;
+    }
+    }
     
-    @media only screen and (max-width: 549px) {}
+    @media only screen and (max-width: 549px) {
+    .wrapper section.bg-text-area .bg-text {
+    background-image: url(img/bg-iamges.jpg);
+    padding: 15px 22px;
+    }
+
+    section.blog-post-area .big-text {
+    float: right;
+    width: 100%;
+    padding-right: 7px;
+    }
+
+    section.blog-post-area .big-image {
+    float: left;
+    width: 100%;
+    padding-right: 7px;
+    }
+    }
     
-    @media only screen and (max-width: 365px) {}
+    @media only screen and (max-width: 365px) {
+    .wrapper section.bg-text-area .bg-text {
+    background-image: url(img/bg-iamges.jpg);
+    padding: 5px 11px;
+    }
+
+    section.blog-post-area .big-text {
+    float: right;
+    width: 100%;
+    padding-right: 5px;
+    }
+
+    section.blog-post-area .big-image {
+    float: left;
+    width: 100%;
+    padding-right: 5px;
+    }
+    }
