@@ -1,34 +1,34 @@
 {% load menu %}
 <header class="header">
     <div class="container">
-        <div class="row">
-            <div class="col-md-1">
+        <div class="row d-flex">
+            <div class="col-md-1 header-order-1">
                 <div class="logo">
                     <h2><a href="{% url 'home' %}">Home</a></h2>
                 </div>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-8 header-order-2">
 
-                {% show_menu %}
+                {% show_menu "menu" "d-flex" %}
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3 header-order-3">
 
                 <div class="logo">
                     <div class="row">
                         {%if request.user.is_authenticated %}
-                        <div class="col-md-4">
-                            <h2 style="font-size:25px;font-weight:600">Welcome, {{user.username}}</h2>
+                        <div class="col-md-6">
+                            <h2 style="padding: 15px 0;font-size:20px;font-weight:600">Welcome, {{user.username}}</h2>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <h2><a href="{% url 'logout' %}">Logout</a></h2>
                         </div>
                         {%else%}
-                        <div class="col-md-4">
-                            <h2><a href="{% url 'register' %}">Register</a></h2>
+                        <div class="col-md-6">
+                            <h2><a href="{% url 'register' %}" class="register">Register</a></h2>
                         </div>
-                        <div class="col-md-4">
-                            <h2><a href="{% url 'login' %}">Login</a></h2>
+                        <div class="col-md-6">
+                            <h2 ><a href="{% url 'login' %}" class="register">Login</a></h2>
                         </div>
                         {%endif%}
                     </div>

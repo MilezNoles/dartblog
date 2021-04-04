@@ -31,7 +31,7 @@
 .wrapper header.header .logo {}
 
 .wrapper header.header .logo h2 {
-    margin: 0 0 0 40px;
+    margin: 0 0 0 20px;
     padding: 0;
 }
 
@@ -756,4 +756,32 @@ section.blog-post-area h4 span.author-name {
 .grid .portfolio-item img {
     width: 100px;
     height: auto;
+}
+
+
+.d-flex{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+.header-order-1 {
+  order: 1;
+}
+
+.header-order-2 {
+  order: 2;
+}
+
+.header-order-3 {
+  order: 3;
+}
+
+.register {
+padding-bottom:10px;
+padding-top:10px;
+}
+
+.welcome{
+padding-bottom:10px;
+padding-top:10px;
 }
