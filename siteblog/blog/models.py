@@ -1,20 +1,6 @@
 from django.db import models, transaction
 from django.urls import reverse_lazy
-from django.contrib.auth.models import User
 
-'''
-Category
------------
-title, slug
-
-Tag
-________
-title, slug
-
-Post
--------------
-title, slug, author, content, created_at, photo, views, category, 
-'''
 
 class Category(models.Model):
     title = models.CharField(max_length=255, verbose_name="Category",)
@@ -80,22 +66,23 @@ class Post(models.Model):
         ordering = ["-created_at"]
 
 
+
+
+
+
+
+
 class Comments(models.Model):
-    username = models.CharField(max_length=50, verbose_name="Username", )  # обязательный атрибут - длина
-
-    comment = models.TextField(verbose_name="Comment")  # по умолчанию пустой
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата публикации")  # про создании новости
-    # поставится не изменяемая дата и время,которые будут взяты в момент создания
-    # фото будут сохраняться в папке фото/год.месяц.день
-
-
-
-    def __str__(self):
-        return self.username
-
-
+    post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='comments')
+    username = models.CharField(max_length=80, verbose_name="Username")
+    comment = models.TextField(verbose_name="Comment")
+    created_at = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "Comment"  # имя в админке ед число
+        verbose_name = "Comment"
         verbose_name_plural = "Comments"
-        ordering = ["created_at"]
+        ordering = ['created_at']
+
+    def __str__(self):
+        return 'Comment {} by {}'.format(self.comment, self.username)
