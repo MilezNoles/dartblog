@@ -49,7 +49,7 @@ class UserRegister(UserCreationForm):
 class CommentsForm(forms.ModelForm):
     class Meta:
         model = Comments
-        fields = ["username", "comment", ]
+        fields = ["username", "comment",]
         widgets = {
             "username": forms.TextInput(attrs={'class': "name", "placeholder": "Name"}, ),      # "type": "hidden"
             "comment": forms.TextInput(attrs={

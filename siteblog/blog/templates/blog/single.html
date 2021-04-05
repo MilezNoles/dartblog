@@ -1,27 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
 {% load sidebar %}
-{% load comment %}
-
 
 
 {% block title%} {{post.title}} :: {{block.super}} {% endblock%}
 {% block content %}
 
 
-        <section class="single-blog-area">
-            <div class="container">
-                <div class="row">
-                   <div class="col-md-12">
-                    <div class="border-top">
-                        <div class="col-md-8">
+<section class="single-blog-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="border-top">
+                    <div class="col-md-8">
                         <div class="blog-area">
                             <div class="blog-area-part">
                                 <h2>{{post.title}}</h2>
                                 <div class="for-style">
                                     <div>
 
-                                        <span style="font-size:25px;font-weight:bold">Category: <a href="{{ post.category.get_absolute_url }}">{{ post.category }}</a></span>
+                                        <span style="font-size:25px;font-weight:bold">Category: <a
+                                                href="{{ post.category.get_absolute_url }}">{{ post.category }}</a></span>
                                         <br>
                                         <br>
                                         {% if post.tags.exists %}
@@ -66,10 +65,13 @@
                                                     <p>{{comment.created_at}}</p>
                                                 </div>
                                                 <div class="comment-body">
-                                                    <p>{{comment.comment}}</p>
+                                                    <p>{{comment.comment | linebreaks}}</p>
                                                 </div>
                                                 <div class="reply">
-                                                    <p><span><a href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>12</span><span><a href="#"><i class="fa fa-reply" aria-hidden="true"></i></a>7</span></p>
+                                                    <p><span><a href="#"><i class="fa fa-thumbs-up"
+                                                                            aria-hidden="true"></i></a>0</span><span><a
+                                                            href="#"><i class="fa fa-reply" aria-hidden="true"></i></a>0</span>
+                                                    </p>
                                                 </div>
                                             </section>
                                         </article>
@@ -81,7 +83,30 @@
 
                             </div>
                             <a name="comment"></a>
-                        {% add_comments %}
+
+                            {% if new_comment %}
+                            <div class="alert alert-success" role="alert">
+                                Your comment is awaiting moderation
+                            </div>
+                            {% else %}
+                            <h3>Leave a comment</h3>
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.non_field_errors }}
+                                <div class="name">
+                                    {{ form.username.errors }}
+                                    {{ form.username }}
+                                </div>
+
+                                <div class="comment">
+                                    {{ form.comment.errors }}
+                                    {{ form.comment }}
+                                </div>
+                                <div class="post">
+                                    <input type="submit" value="Post">
+                                </div>
+                            </form>
+                            {% endif %}
 
 
                         </div>
@@ -102,12 +127,11 @@
                         {% get_tags %}
 
 
-
-                    </div>
-                    </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
 {% endblock%}

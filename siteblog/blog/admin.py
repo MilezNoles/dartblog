@@ -50,9 +50,13 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display_links = ("id", "title")  # что будет ссылкой на редактирование в админке
 
 class CommentsAdmin(admin.ModelAdmin):
-    list_display = (
-        "id", "username", "created_at")  # столбцы в админке
-    list_display_links = ("id", "username")  # что будет ссылкой на редактирование в админке
+    list_display = ('username', 'comment', 'post', 'created_at', 'active')
+    list_filter = ('active', 'created_at')
+    list_display_links = ("username",)
+    search_fields = ('username', 'email', 'comment')
+
+    def approve_comments(self, request, queryset):
+        queryset.update(active=True)
 
 
 

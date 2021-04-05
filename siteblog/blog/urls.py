@@ -8,8 +8,7 @@ urlpatterns = [
     path("logout/", user_logout, name="logout"),
     path('category/<str:slug>/', PostsByCategory.as_view(), name="category"),
     path('tag/<str:slug>/', PostsByTag.as_view(), name="tag"),
-    path('post/<str:slug>/',GetPost.as_view(), name="post"),
+    path('post/<str:slug>/',single_post, name="post"),
     path('search/',Search.as_view(), name="search"),
-    path('addcomments/',AddComments.as_view(), name="addcomments"),
     # path('user/<int:pk>/',PersonalPage.as_view(), name="personal"),
 ]
