@@ -46,11 +46,7 @@
                                     <a href="/"> {{post.author}} </a>
                                         </span></div>
                             <div><span style="font-size:14px;font-weight:bold">Views: {{post.views}} </span></div>
-                            <div class="ads-area">
 
-                                <img src="{% static 'img/ads.jpg' %}" alt="">
-                                <p>Your Ad Banner Goes Here</p>
-                            </div>
 
                             <div class="commententries">
 
@@ -101,10 +97,7 @@
                         </div>
 
                         {% get_popular 5 %}
-                        <div class="sidebar-ads">
-                            <img src="img/sidebar-ads.jpg" alt="">
-                            <p>Place For Your <br> Ad Banner</p>
-                        </div>
+
 
                         {% get_tags %}
 
