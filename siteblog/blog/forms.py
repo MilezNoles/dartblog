@@ -53,7 +53,7 @@ class CommentsForm(forms.ModelForm):
         model = Comments
         fields = ["username", "comment",]
         widgets = {
-            "username": forms.TextInput(attrs={'class': "name", "placeholder": "Name"}, ),      # "type": "hidden"
+            "username": forms.TextInput(attrs={'class': "name", "type": "hidden" }, ),      # "type": "hidden"
             "comment": forms.TextInput(attrs={
                 "placeholder": "Comment",
                 'class': "comment",
@@ -62,8 +62,8 @@ class CommentsForm(forms.ModelForm):
         }
 
 
-    def clean_username(self):  # валидатор для title
-        username = self.cleaned_data["username"]
-        if re.match(r"\d", username):  # \d цифра
-            raise ValidationError("Ник не должен начинаться с цифры")
-        return username
+    # def clean_username(self):  # валидатор для title пример
+    #     username = self.cleaned_data["username"]
+    #     if re.match(r"\d", username):  # \d цифра
+    #         raise ValidationError("Ник не должен начинаться с цифры")
+    #     return username

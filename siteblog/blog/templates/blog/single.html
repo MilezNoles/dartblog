@@ -47,7 +47,8 @@
                             <div><span style="font-size:14px;font-weight:bold">Views: {{post.views}} </span></div>
 
                             <div class="ads-area">
-                                <a href="https://www.instagram.com/oksi_lashes/"><img src="{% static 'img/ads.jpg' %}" alt="Advertisement"></a>
+                                <a href="https://www.instagram.com/oksi_lashes/"><img src="{% static 'img/ads.jpg' %}"
+                                                                                      alt="Advertisement"></a>
                             </div>
 
                             <div class="commententries">
@@ -87,6 +88,8 @@
                             </div>
                             <a name="comment"></a>
 
+                            {%if request.user.is_authenticated %}
+
                             {% if new_comment %}
                             <div class="alert alert-success" role="alert">
                                 Your comment is awaiting moderation
@@ -97,6 +100,7 @@
                                 {% csrf_token %}
                                 {{ form.non_field_errors }}
                                 <div class="name">
+                                    <h3 class="comments-username">Username: {{user.username}}</h3>
                                     {{ form.username.errors }}
                                     {{ form.username }}
                                 </div>
@@ -110,6 +114,16 @@
                                 </div>
                             </form>
                             {% endif %}
+
+                            {%else%}
+                            <div class="d-flex">
+
+    <span class="navbar-text">To post a comment you need <a href="{% url 'register' %}">register </a>
+        or <a class="" href="{% url 'login' %}">login</a></span>
+
+
+                            </div>
+                            {%endif%}
 
 
                         </div>

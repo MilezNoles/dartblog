@@ -116,6 +116,8 @@ def single_post(request, slug):
     if request.method == 'POST':
         comment_form = CommentsForm(data=request.POST)
         if comment_form.is_valid():
+            # Setting user to current logged in user
+            comment_form.instance.username = request.user
             # Create Comment object but don't save to database yet
             new_comment = comment_form.save(commit=False)
             # Assign the current post to the comment

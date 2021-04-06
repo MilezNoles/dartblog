@@ -74,7 +74,7 @@ class Post(models.Model):
 
 class Comments(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='comments')
-    username = models.CharField(max_length=80, verbose_name="Username")
+    username = models.CharField(max_length=80, verbose_name="Username", blank=True)
     comment = models.TextField(verbose_name="Comment")
     created_at = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
