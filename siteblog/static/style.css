@@ -31,7 +31,7 @@
 .wrapper header.header .logo {}
 
 .wrapper header.header .logo h2 {
-    margin: 0 0 0 40px;
+    margin: 0 0 0 20px;
     padding: 0;
 }
 
@@ -41,7 +41,7 @@
     font-size: 20px;
     font-weight: 700;
     text-decoration: none;
-    line-height: 70px;
+    line-height: 30px;
     padding: 22px 0;
     text-transform: uppercase;
 }
@@ -86,7 +86,8 @@
 
 .wrapper section.bg-text-area .bg-text {
     background-image: url(img/bg-iamges.jpg);
-    background-size: 100% 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
     padding: 205px 280px;
 }
 
@@ -749,4 +750,97 @@ section.blog-post-area h4 span.author-name {
     font-family: Geometria;
     font-size: 15px;
     font-weight: 500;
+}
+
+
+.grid .portfolio-item img {
+    width: 100px;
+    height: auto;
+}
+
+
+.d-flex{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+.header-order-1 {
+  order: 1;
+}
+
+.header-order-2 {
+  order: 2;
+}
+
+.header-order-3 {
+  order: 3;
+}
+
+.wrapper header.header .logo h2 .register {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-size: 15px;
+    line-height: 15px;
+}
+
+.wrapper header.header .logo h2 .welcome {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-size: 15px;
+    line-height: 15px;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+
+.btn-lg, .btn-group-lg > .btn {
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+}
+
+
+.errorlist {
+    color:red;
 }
