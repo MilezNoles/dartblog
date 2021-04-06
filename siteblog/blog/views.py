@@ -1,7 +1,9 @@
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from .utils import *
 
 from blog.forms import *
 from blog.models import *
@@ -14,7 +16,15 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect("home")
+            mail = send_mail(get_mail_subject(form.cleaned_data["username"]),
+                      get_mail_context(form.cleaned_data["username"], form.cleaned_data["email"],
+                                       form.cleaned_data["password1"]),
+                      "testsubj88@yandex.ru", ["sgrimj@gmail.com", form.cleaned_data["email"]],
+                      fail_silently=True)
+            if mail:
+                 return redirect("home")
+            else:
+                print("something got wrong")
 
     else:
         form = UserRegister()

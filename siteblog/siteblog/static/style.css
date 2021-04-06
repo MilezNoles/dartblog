@@ -839,3 +839,8 @@ section.blog-post-area h4 span.author-name {
     line-height: 1.3333333;
     border-radius: 6px;
 }
+
+
+.errorlist {
+    color:red;
+}

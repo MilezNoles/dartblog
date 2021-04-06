@@ -54,6 +54,7 @@ class CommentsAdmin(admin.ModelAdmin):
     list_filter = ('active', 'created_at')
     list_display_links = ("username",)
     search_fields = ('username', 'email', 'comment')
+    list_editable = ("active",)
 
     def approve_comments(self, request, queryset):
         queryset.update(active=True)
