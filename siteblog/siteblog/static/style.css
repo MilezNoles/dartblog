@@ -730,6 +730,16 @@ section.blog-post-area h4 span.author-name {
     padding: 0 12px;
     margin-bottom: 7px;
 }
+.single-blog-area .tags .currency {
+    background: #0778ab none repeat scroll 0 0;
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    width: fit-content;
+    padding: 0 8px;
+}
+
+
 .single-blog-area .tags p a {
     color: #fff;
     display: inline-block;
