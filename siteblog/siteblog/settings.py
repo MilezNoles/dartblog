@@ -158,3 +158,5 @@ EMAIL_HOST_USER="testsubj88@yandex.ru"
 EMAIL_HOST_PASSWORD = "369963eE"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+
+AUTHENTICATION_BACKENDS = ['blog.customBackend.UsernameOrEmailBackend']
