@@ -7,21 +7,19 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 
-from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
-#can use ^ mixins + GenericAPi to get rid of gef get,post etc
+from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView
+#can use ^ mixins + GenericAPi to get rid of funcs: get,post etc
 
 #class + mixins based
-class PostList(ListModelMixin,CreateModelMixin,GenericAPIView):
+class PostList(ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-    def get(self, request, *args, **kwargs):
-        self.serializer_class = ThinPostSerializer       #for thinner get json
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(self, request, *args, **kwargs)
+    def list(self, request, *args, **kwargs):
+        posts = Post.objects.all()
+        context = {'request': request}
+        serializer = ThinPostSerializer(posts, many=True, context=context)
+        return Response(serializer.data)
 
 
 class PostDetail(RetrieveUpdateDestroyAPIView):
@@ -31,6 +29,18 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
 
 
 
+
+# ListModelMixin,CreateModelMixin,GenericAPIView    this requires to write funcs get post etc
+# class PostList(ListModelMixin,CreateModelMixin,GenericAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+#
+#     def get(self, request, *args, **kwargs):
+#         self.serializer_class = ThinPostSerializer       #for thinner get json
+#         return self.list(request, *args, **kwargs)
+#
+#     def post(self, request, *args, **kwargs):
+#         return self.create(self, request, *args, **kwargs)
 
 #class based
 # class PostList(APIView):
