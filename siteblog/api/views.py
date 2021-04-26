@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin,UpdateModelMixin, DestroyModelMixin,RetrieveModelMixin
+from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.mixins import ListModelMixin, CreateModelMixin
 #can use ^ mixins + GenericAPi to get rid of gef get,post etc
 
 #class + mixins based
@@ -24,19 +24,11 @@ class PostList(ListModelMixin,CreateModelMixin,GenericAPIView):
         return self.create(self, request, *args, **kwargs)
 
 
-class PostDetail(RetrieveModelMixin,UpdateModelMixin, DestroyModelMixin,GenericAPIView):
+class PostDetail(RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = "slug"
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
 
 
 
