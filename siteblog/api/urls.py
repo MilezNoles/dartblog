@@ -1,10 +1,29 @@
 from django.urls import path
 from api.views import *
 from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path('posts/', PostList.as_view(),),
-    path('posts/<str:slug>/', PostDetail.as_view(),name="posts_view"),
 
-]
-urlpatterns = format_suffix_patterns(urlpatterns)     # for api/posts/?format= (api/json)
+router = DefaultRouter()
+router.register("posts", PostViewSet, basename="posts")
+# to create auto paths for all thingies
+urlpatterns = router.urls
+
+# posts_list = PostViewSet.as_view({
+#     "get": "list",
+#     "post": "create",
+# })
+#
+# post_detail = PostViewSet.as_view({
+#     "get": "retrieve",
+#     "put": "update",
+#     "patch": "partial_update",
+#     "delete": "destroy",
+# })
+#
+# urlpatterns = [
+#     path('posts/', posts_list,),
+#     path('posts/<str:slug>/', post_detail ,name="posts-view"),
+#
+# ]
+# urlpatterns = format_suffix_patterns(urlpatterns)     # for api/posts/?format= (api/json)

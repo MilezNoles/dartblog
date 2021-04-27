@@ -10,7 +10,7 @@ class PostSerializer(ModelSerializer):
 
 
 class ThinPostSerializer(ModelSerializer):   #for shorter view
-    url = HyperlinkedIdentityField(view_name="posts_view", lookup_field="slug")     #for urls in api view page
+    url = HyperlinkedIdentityField(view_name="posts-detail", lookup_field="slug")     #for urls in api view page
     class Meta:
         model = Post
         fields = ("id", "title", "url")

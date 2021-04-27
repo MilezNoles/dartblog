@@ -1,6 +1,8 @@
 from django.db import models, transaction
 from django.urls import reverse_lazy
+from django.conf import settings
 
+User = settings.AUTH_USER_MODEL
 
 class Category(models.Model):
     title = models.CharField(max_length=255, verbose_name="Category",)
