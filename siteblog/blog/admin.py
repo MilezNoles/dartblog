@@ -24,7 +24,7 @@ class PostAdmin(admin.ModelAdmin):
     list_editable = ("category","is_main",)
     list_filter = ("category","tags")
 
-    readonly_fields = ("views", "created_at", "get_photo", )  # поля которые будут только для чтения
+    readonly_fields = ("views", "created_at", "get_photo","author" )  # поля которые будут только для чтения
     fields =("title","slug", "category","tags","author", "content", "photo", "get_photo","views", "created_at","is_main")
 
 
@@ -40,14 +40,14 @@ class PostAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     list_display = (
-        "id", "title", "slug",)  # столбцы в админке
-    list_display_links = ("id", "title")  # что будет ссылкой на редактирование в админке
+        "id", "title", "slug",)
+    list_display_links = ("id", "title")
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     list_display = (
-        "id", "title", "slug",)  # столбцы в админке
-    list_display_links = ("id", "title")  # что будет ссылкой на редактирование в админке
+        "id", "title", "slug",)
+    list_display_links = ("id", "title")
 
 class CommentsAdmin(admin.ModelAdmin):
     list_display = ('username', 'comment', 'post', 'created_at', 'active')
@@ -55,6 +55,8 @@ class CommentsAdmin(admin.ModelAdmin):
     list_display_links = ("username",)
     search_fields = ('username', 'email', 'comment')
     list_editable = ("active",)
+    fields = ('username', 'comment', 'post', 'created_at', 'active')
+    readonly_fields = ("post","username", "created_at",)
 
     def approve_comments(self, request, queryset):
         queryset.update(active=True)

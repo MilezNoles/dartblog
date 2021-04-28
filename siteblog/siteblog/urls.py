@@ -22,6 +22,8 @@ import debug_toolbar
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include("api.urls")),
+    #  login for rest api
+    path('api-auth/', include(("rest_framework.urls", "rest_framework"))),
     path('', include("blog.urls")),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('__debug__/', include(debug_toolbar.urls)),

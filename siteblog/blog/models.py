@@ -40,7 +40,7 @@ class Tag(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=255, verbose_name="Title",)
     slug = models.SlugField(max_length=255, verbose_name="Url", unique=True)
-    author = models.CharField(max_length=100, verbose_name="Author", )
+    author = models.ForeignKey(User, verbose_name="Author",on_delete=models.PROTECT,null=True, blank=True)
     content = models.TextField(verbose_name="Content",blank=True,)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Creation date", )
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", blank=True, verbose_name="Photo", )
@@ -76,7 +76,8 @@ class Post(models.Model):
 
 class Comments(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='comments')
-    username = models.CharField(max_length=80, verbose_name="Username", blank=True)
+    #if db is huge use null=True,blank=True for migrations after adding ForeignKey
+    username = models.ForeignKey(User, verbose_name="Username",on_delete=models.PROTECT, blank=True)
     comment = models.TextField(verbose_name="Comment")
     created_at = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)

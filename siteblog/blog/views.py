@@ -107,12 +107,12 @@ class PostsByTag(ListView):
 def single_post(request, slug):
     template_name = 'blog/single.html'
     post = get_object_or_404(Post, slug=slug)
-    comments = post.comments.filter(active=True)
+    comments = post.comments.filter(active=True).select_related("username")    # reduce SQL queries
     new_comment = None
     post.views = F("views") + 1
     post.save()
     post.refresh_from_db()
-    # Comment posted
+    # Comments
     if request.method == 'POST':
         comment_form = CommentsForm(data=request.POST)
         if comment_form.is_valid():
@@ -123,7 +123,11 @@ def single_post(request, slug):
             # Assign the current post to the comment
             new_comment.post = post
             # Save the comment to the database
-            new_comment.save()
+            if request.user.is_staff:
+                new_comment.active = True
+                new_comment.save()
+            else:
+                new_comment.save()
     else:
         comment_form = CommentsForm()
 
@@ -168,38 +172,15 @@ class Search(ListView):
         return context
 
 
-class AddComments(CreateView):
-    form_class = CommentsForm
-    template_name = "blog/single.html"
+# class AddComments(CreateView):
+#     form_class = CommentsForm
+#     template_name = "blog/single.html"
+#
+#     def form_valid(self, form):
+#         redirect = self.request.META.get('HTTP_REFERER')  # to previous page
+#         if redirect:
+#             redirect += "#comment"  # to anchor
+#             self.success_url = redirect
+#         return super(AddComments, self).form_valid(form)
 
-    # def get_initial(self):
-    #     initial = super(AddComments, self).get_initial()
-    #     initial.update({"username": self.request.user.username})
-    #     return initial
 
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     prev_page = self.request.META.get('HTTP_REFERER')
-    #
-    #     context["s"] =
-    #     return context
-
-    def form_valid(self, form):
-        redirect = self.request.META.get('HTTP_REFERER')  # to previous page
-        if redirect:
-            redirect += "#comment"  # to anchor
-            self.success_url = redirect
-        return super(AddComments, self).form_valid(form)
-
-    # def form_invalid(self, form):                           not working -------fix later
-    #     print("form invalid")
-    #     print(super(AddComments, self).form_invalid(form))
-    #     redirect = self.request.META.get('HTTP_REFERER')  # to previous page
-    #     print(form)
-    #
-    #     if redirect:
-    #         redirect += "#comment"  # to anchor
-    #         self.unsuccess_url = redirect
-    #         print(redirect)
-    #
-    #     return super(AddComments, self).form_invalid(form)

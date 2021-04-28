@@ -1,9 +1,22 @@
 from rest_framework.serializers import IntegerField,CharField,Serializer,ModelSerializer,\
-    ImageField, HyperlinkedIdentityField,SlugRelatedField
+    ImageField, HyperlinkedIdentityField,SlugRelatedField, SerializerMethodField
 
 from blog.models import Post
 
 class PostSerializer(ModelSerializer):
+    author = SerializerMethodField(read_only=True)       # set read only
+    views = SerializerMethodField(read_only=True)
+    slug = SerializerMethodField(read_only=True)
+
+    def get_author(self,obj):
+        return obj.author.username
+
+    def get_views(self,obj):
+        return obj.views
+
+    def get_slug(self,obj):
+        return obj.slug
+
     class Meta:
         model = Post
         fields = "__all__"
