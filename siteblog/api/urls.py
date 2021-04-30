@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register("posts", PostViewSet, basename="posts")
+router.register("users", UserViewSet, basename="users")
 # to create auto paths for all thingies
 urlpatterns = router.urls
 

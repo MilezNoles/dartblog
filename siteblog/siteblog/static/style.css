@@ -31,7 +31,7 @@
 .wrapper header.header .logo {}
 
 .wrapper header.header .logo h2 {
-    margin: 0 0 0 20px;
+    margin: 10px 0 0 10px;
     padding: 0;
 }
 
@@ -794,8 +794,6 @@ section.blog-post-area h4 span.author-name {
 }
 
 .wrapper header.header .logo h2 .welcome {
-    padding-bottom: 10px;
-    padding-top: 10px;
     font-size: 15px;
     line-height: 15px;
 }

@@ -11,6 +11,26 @@ class PostAdminForm(forms.ModelForm):
         model = Post
         fields = '__all__'
 
+class ProfileAdmin(admin.ModelAdmin):
+
+    save_on_top = True
+    list_display = ("user", "slug", "get_photo",)
+    list_display_links = ("user",)
+    search_fields = ("user",)
+    list_filter = ("user",)
+
+    readonly_fields = ("user","slug","get_photo",)
+    fields =("user","slug", "bio","city","occupation", "birth_date", "profile_picture", "get_photo",)
+
+    def get_photo(self, obj):
+        if obj.profile_picture:
+            return mark_safe(f"<img src='{obj.profile_picture.url}' width='50'>")
+        else:
+            return " - "
+
+    get_photo.short_description = "Аватар"  # Меняем вывод Getphoto в столбце админки на Preview
+
+
 
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
@@ -67,5 +87,6 @@ admin.site.register(Post, PostAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Comments, CommentsAdmin)
+admin.site.register(Profile, ProfileAdmin)
 
 

@@ -62,11 +62,11 @@
                                     <li>
                                         <article class="comment">
                                             <header class="comment-author">
-                                                <img src="{% static 'img/author-1.jpg' %}" alt="">
+                                                <img src="/media/{{comment.username.profile.profile_picture}}" alt="">
                                             </header>
                                             <section class="comment-details">
                                                 <div class="author-name">
-                                                    <h5><a href="/">{{comment.username}}</a></h5>
+                                                    <h5><a href="{% url 'profile' comment.username.profile.slug %}">{{comment.username}}</a></h5>
                                                     <p>{{comment.created_at}}</p>
                                                 </div>
                                                 <div class="comment-body">

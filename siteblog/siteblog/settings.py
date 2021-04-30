@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'blog.apps.BlogConfig',
     'api.apps.ApiConfig',
+    'jobscrapper.apps.JobscrapperConfig',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,12 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
 AUTHENTICATION_BACKENDS = ['blog.customBackend.UsernameOrEmailBackend']
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+    )
+}

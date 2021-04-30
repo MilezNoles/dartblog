@@ -4,6 +4,7 @@ from django.views.generic import ListView, CreateView
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from .utils import *
+from django.urls import reverse_lazy
 
 from blog.forms import *
 from blog.models import *
@@ -15,19 +16,24 @@ def register(request):
         form = UserRegister(request.POST)  # связь формы с данными
         if form.is_valid():
             user = form.save()
+
             login(request, user)
+            slug = user.profile.slug
+
             mail = send_mail(get_mail_subject(form.cleaned_data["username"]),
                       get_mail_context(form.cleaned_data["username"], form.cleaned_data["email"],
                                        form.cleaned_data["password1"]),
                       "testsubj88@yandex.ru", ["sgrimj@gmail.com", form.cleaned_data["email"]],
                       fail_silently=True)
-            if mail:
-                 return redirect("home")
-            else:
-                print("something got wrong")
-
+            # if mail:
+            #      return redirect("profile")
+            # else:
+            #     print("something got wrong")
+            return redirect("profile",slug)
+# /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     else:
         form = UserRegister()
+
 
     context = {
         "form": form,
@@ -45,7 +51,6 @@ def user_login(request):
             return redirect("home")
 
 
-
     else:
         form = UserLogin()
 
@@ -58,6 +63,24 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("login")
+
+@transaction.atomic
+def profile(request, slug):
+    template_name = 'blog/profile.html'
+    profile = get_object_or_404(Profile, slug=slug)
+    if request.method == 'POST':
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        #request.FILES for files in form
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect("profile", slug=slug)
+    else:
+        profile_form = ProfileForm(instance=profile)
+
+    context = {'profile': profile,
+               'form': profile_form}
+
+    return render(request, template_name, context)
 
 
 class Home(ListView):
@@ -135,27 +158,8 @@ def single_post(request, slug):
                'comments': comments,
                'new_comment': new_comment,
                'form': comment_form}
-
     return render(request, template_name, context)
 
-
-# class PersonalPage(DetailView):
-#     model = Post
-#     template_name = "blog/personal.html"
-#     context_object_name = "post"
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         self.object.views = F("views") + 1
-#         self.object.save()
-#         self.object.refresh_from_db()
-#         context["user"] = User.objects.get(pk=self.kwargs["pk"])
-#         return context
-#
-#     def get_queryset(self):
-#         user = User.objects.get(pk=self.kwargs["pk"])
-#         print(user.username)
-#         return Post.objects.filter(author=user.username, )
 
 
 class Search(ListView):

@@ -1,7 +1,54 @@
-from rest_framework.serializers import IntegerField,CharField,Serializer,ModelSerializer,\
-    ImageField, HyperlinkedIdentityField,SlugRelatedField, SerializerMethodField
 
+from rest_framework.serializers import IntegerField,EmailField,Serializer,ModelSerializer,\
+    ImageField, HyperlinkedIdentityField,SlugRelatedField, SerializerMethodField, ValidationError
+from django.contrib.auth import get_user_model
 from blog.models import Post
+from django.contrib.auth.hashers import make_password
+
+
+
+class UserSerializer(ModelSerializer):
+    email = EmailField(max_length=255, required=True,)
+
+
+
+    class Meta:
+        model = get_user_model()
+        queryset = model.objects.all()
+        fields = ("id", "username","email", "password", "is_superuser")
+        extra_kwargs = {"password": {"write_only": True}}  #for user password
+
+
+    def create(self, validated_data):
+        user = self.Meta.model(**validated_data)
+        user.password = make_password(user.password)
+        #temporary email handler
+        users = self.Meta.queryset
+        lower_email = user.email.lower()
+        if users.filter(email__iexact=lower_email).exists():
+            raise ValidationError("This email already exists")
+
+        user.save()
+        return user
+        
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data.pop("password", ""))
+        #temporary email handler
+        user = self.Meta.model(**validated_data)
+        users = self.Meta.queryset
+        lower_email = user.email.lower()
+        if users.filter(email__iexact=lower_email).exists():
+            raise ValidationError("This email already exists")
+        return super().update(instance, validated_data)
+
+    # def validate_email(self, value):
+    #     lower_email = value.lower()
+    #     users = self.Meta.queryset
+    #     if users.filter(email__iexact=lower_email).exists():
+    #         raise ValidationError("This email already exists")
+    #     return lower_email
+        
+        
 
 class PostSerializer(ModelSerializer):
     author = SerializerMethodField(read_only=True)       # set read only

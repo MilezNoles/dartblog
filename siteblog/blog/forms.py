@@ -46,6 +46,16 @@ class UserRegister(UserCreationForm):
         #
         # } для UserCreationForm это поле работает не корректно, поэтому все переносим из меты в UserRegister
 
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["bio", "city","occupation", "profile_picture" ]
+        widgets = {"bio" : forms.Textarea(attrs={'class': "form-control", }),
+                   "city": forms.TextInput(attrs={'class': "form-control","placeholder":"это поле обязательно для сервиса поиска", }),
+                   "occupation": forms.TextInput(attrs={'class': "form-control","placeholder":"это поле обязательно для сервиса поиска", }),
+        }
+
+
 
 class CommentsForm(forms.ModelForm):
     class Meta:
