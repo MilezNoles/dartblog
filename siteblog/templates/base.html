@@ -21,30 +21,27 @@
 </head>
 
 <body>
-    <div class="wrapper">
+<div class="wrapper">
 
 
-        {%include "inc/_header.html"%}
-
-
-
-
-                {% block content %} {% endblock %}
+    {%include "inc/_header.html"%}
 
 
 
 
-        {% cache 60 footer %}
-        {%include "inc/_footer.html"%}
-        {% endcache %}
+    {% block content %} {% endblock %}
 
 
+    {% cache 60 footer %}
+    {%include "inc/_footer.html"%}
+    {% endcache %}
 
-    </div>
-    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
-    <script src="{% static 'js/active.js' %}"></script>
+
+</div>
+<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/active.js' %}"></script>
 </body>
 
 </html>

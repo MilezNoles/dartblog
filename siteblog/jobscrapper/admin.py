@@ -19,3 +19,4 @@ class OccupationAdmin(admin.ModelAdmin):
 admin.site.register(City, CityAdmin)
 admin.site.register(Occupation, OccupationAdmin)
 admin.site.register(Vacancy)
+admin.site.register(Errors)

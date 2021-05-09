@@ -1,6 +1,7 @@
 from django.db import models
 from slugify import slugify
 from blog.models import Profile
+import jsonfield
 
 class City(models.Model):
     name = models.CharField(max_length=50,
@@ -25,13 +26,13 @@ class City(models.Model):
 
 class Occupation(models.Model):
     name = models.CharField(max_length=50,
-                            verbose_name="Язык программирования",
+                            verbose_name="Специальность",
                             unique=True)
     slug = models.SlugField(max_length=50, blank=True, unique=True)
 
     class Meta:
-        verbose_name = "Язык программирования"
-        verbose_name_plural = "Языки программирования"
+        verbose_name = "Специальность"
+        verbose_name_plural = "Специальности"
         ordering = ["name"]
 
     def __str__(self):
@@ -56,7 +57,19 @@ class Vacancy(models.Model):
     class Meta:
         verbose_name = "Вакансию"
         verbose_name_plural = "Вакансии"
-        ordering = ["title"]
+        ordering = ["-timestamp"]
 
     def __str__(self):
         return self.title
+
+
+class Errors(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    data = jsonfield.JSONField()
+
+    class Meta:
+        verbose_name = "Ошибка"
+        verbose_name_plural = "Ошибки"
+        ordering = ["-timestamp"]
+
+

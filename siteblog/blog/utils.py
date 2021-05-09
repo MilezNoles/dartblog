@@ -10,3 +10,11 @@ def get_mail_context(nick, email, password):
            f"Login: {nick}\n" \
            f"Email: {email}\n" \
            f"Password: {password}\n"
+
+def normalizer_bd(word:str):
+    """
+    заменяет "-" на " "
+    и делает все заглавными
+     буквами(для единого вида)
+    """
+    return word.replace("-"," ").title()

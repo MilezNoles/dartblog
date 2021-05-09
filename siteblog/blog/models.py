@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.urls import reverse_lazy
 from django.conf import settings
 from slugify import slugify
+from jobscrapper.url_creator import url_creator_hh
 
 
 User = settings.AUTH_USER_MODEL
@@ -16,10 +17,12 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255, verbose_name="Url", unique=True)
     bio = models.TextField(blank=True, verbose_name='О себе',)
-    city = models.CharField(max_length=30, blank=True)
+    city = models.CharField(max_length=60, blank=True)
     occupation = models.CharField(max_length=200, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to="useravatars/%Y/%m/%d/", blank=True, verbose_name="profile picture", )
+    send_email = models.BooleanField(default=True,verbose_name="Получать рассылку")
+    url_for_hh = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return self.user.username
@@ -37,6 +40,14 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
+
+    def save(self, *args, **kwargs):
+        if self.city and self.occupation:
+            self.url_for_hh = url_creator_hh(self.city,self.occupation)
+            print(self.url_for_hh)
+        else:
+            self.url_for_hh = None
+        super().save(*args,**kwargs)
 
     def get_absolute_url(self):  # для ссылок
         return reverse_lazy("profile", kwargs={"slug": self.slug, })

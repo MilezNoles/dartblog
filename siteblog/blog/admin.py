@@ -19,8 +19,8 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ("user",)
     list_filter = ("user",)
 
-    readonly_fields = ("user","slug","get_photo",)
-    fields =("user","slug", "bio","city","occupation", "birth_date", "profile_picture", "get_photo",)
+    readonly_fields = ("user","slug","get_photo","url_for_hh")
+    fields =("user","slug", "bio","city","occupation", "birth_date", "profile_picture", "get_photo", "send_email","url_for_hh")
 
     def get_photo(self, obj):
         if obj.profile_picture:
