@@ -3,7 +3,6 @@ import codecs
 from bs4 import BeautifulSoup as BS
 from random import randint
 
-__all__ = ("hh", "superjob")
 
 headers = [
     {
@@ -24,9 +23,20 @@ def hh(url):
 
     resp = requests.get(url, headers=headers[randint(0, 3)])
     if resp.status_code == 200:
+
         soup = BS(resp.content, "html.parser")
 
         no_new = soup.find("p", attrs={"class": "vacancysearch-xs-header-text"})
+
+        #sometimes hh.ru bugges out and gives particially empty page which causes AttributeError, so if that bug occurs:
+        if no_new == None:
+            jobs.append({0: 0})
+            errors.append({
+                "url": url,
+                "title": "Page is empty(None error)",
+            })
+            return jobs, errors
+
 
         if "ничего не найдено" in no_new.text:
             jobs.append({0: 0})
@@ -40,7 +50,7 @@ def hh(url):
         main_div = soup.find("div", attrs={"class": "vacancy-serp"})
         div_list = main_div.find_all("div", attrs={"class": "vacancy-serp-item"})
         for div in div_list:
-            title = div.find("a", attrs={"class": "bloko-link HH-LinkModifier"})
+            title = div.find("a", attrs={"class": "bloko-link"})
 
             url_to_job = title["href"]
 

@@ -1,6 +1,6 @@
 from django.db import models
 from slugify import slugify
-from blog.models import Profile
+
 import jsonfield
 
 class City(models.Model):
@@ -52,7 +52,7 @@ class Vacancy(models.Model):
     salary = models.CharField(max_length=100,verbose_name="Заработная плата")
     city = models.ForeignKey(City, on_delete=models.CASCADE,verbose_name="Город")
     occupation = models.ForeignKey(Occupation, on_delete=models.CASCADE, verbose_name="Язык программирования")
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Вакансию"
@@ -64,7 +64,7 @@ class Vacancy(models.Model):
 
 
 class Errors(models.Model):
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateField(auto_now_add=True)
     data = jsonfield.JSONField()
 
     class Meta:
@@ -72,4 +72,5 @@ class Errors(models.Model):
         verbose_name_plural = "Ошибки"
         ordering = ["-timestamp"]
 
-
+    def __str__(self):
+        return str(self.timestamp)

@@ -11,7 +11,7 @@ def get_mail_context(nick, email, password):
            f"Email: {email}\n" \
            f"Password: {password}\n"
 
-def normalizer_bd(word:str):
+def normalizer_bd(word):
     """
     заменяет "-" на " "
     и делает все заглавными

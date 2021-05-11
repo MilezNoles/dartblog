@@ -1,13 +1,12 @@
-import codecs
 import os,sys
-
+import django
 
 
 proj = os.path.dirname(os.path.abspath("manage.py"))
 sys.path.append(proj)
 os.environ["DJANGO_SETTINGS_MODULE"] = "siteblog.settings"
 
-import django
+
 django.setup()
 
 
@@ -41,10 +40,9 @@ jobs, errors = [],[]
 
 for url in get_unique_user_urls():
     qs = Profile.objects.filter(url_for_hh=url).first()
-    city = City.objects.filter(name=normalizer_bd(qs.city)).first()
-    occupation = Occupation.objects.filter(name=normalizer_bd(qs.occupation)).first()
+    city = City.objects.get(name=normalizer_bd(qs.city))
+    occupation = Occupation.objects.get(name=normalizer_bd(qs.occupation))
     jobs,e = hh(url)
-    print(jobs)
     if jobs == [{0: 0}]:
         continue
     for job in jobs:
