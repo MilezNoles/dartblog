@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,8 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'ckeditor',
-
+    'rest_framework',
     'blog.apps.BlogConfig',
+    'api.apps.ApiConfig',
+    'jobscrapper.apps.JobscrapperConfig',
 ]
 
 MIDDLEWARE = [
@@ -151,10 +156,24 @@ CACHES = {
     }
 }
 
+#enable .env file which hides passwords and secrets
+load_dotenv()
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
 
 EMAIL_HOST = "smtp.yandex.ru"
 EMAIL_PORT =  465 #2525
-EMAIL_HOST_USER="testsubj88@yandex.ru"
-EMAIL_HOST_PASSWORD = "369963eE"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+
+AUTHENTICATION_BACKENDS = ['blog.customBackend.UsernameOrEmailBackend']
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+    )
+}

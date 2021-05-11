@@ -2,6 +2,7 @@
 
 
 {% if s %}
+
 <div class="pegination">
 
     <div class="nav-links">
@@ -29,7 +30,7 @@
 
 
         <a class="page-numbers" href="?{{ s }}page={{ page_obj.paginator.num_pages }}"><i class="fa fa-angle-right"
-                                                                                   aria-hidden="true"></i><i
+                                                                                          aria-hidden="true"></i><i
                 class="fa fa-angle-right" aria-hidden="true"></i></a>
 
         {% endif %}
@@ -75,51 +76,11 @@
 </div>
 
 
-
 {%endif%}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    {% else %}
+{% else %}
 <div class="col-md-12" style="height:25px;clear:both;"></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 {% endif %}

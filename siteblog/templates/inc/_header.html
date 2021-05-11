@@ -2,9 +2,9 @@
 <header class="header">
     <div class="container">
         <div class="row d-flex">
-            <div class="col-md-2 header-order-1">
+            <div class="col-md-1 header-order-1">
                 <div class="logo">
-                    <h2><a href="{% url 'home' %}">Home</a></h2>
+                    <h2><a href="{% url 'home' %}" style="font-family:'Rye';font-weight: 400;">LA</a></h2>
                 </div>
             </div>
             <div class="col-md-8 header-order-2">
@@ -12,15 +12,17 @@
                 {% show_menu "menu" "d-flex" %}
 
             </div>
-            <div class="col-md-2 header-order-3">
+            <div class="col-md-3 header-order-3">
 
                 <div class="logo">
-                    <div class="row">
+                    <div class="row d-flex">
                         {%if request.user.is_authenticated %}
-                        <div class="col-md-6">
-                            <h2 style="font-size:17px;font-weight:600">Welcome, {{user.username}}</h2>
+                        <div>
+                            <h2>
+                                <a href="{% url 'profile' user.profile.slug %}" class="welcome">{{user.username}}</a>
+                            </h2>
                         </div>
-                        <div class="col-md-6">
+                        <div>
                             <h2><a href="{% url 'logout' %}" class="welcome">Logout</a></h2>
                         </div>
                         {%else%}

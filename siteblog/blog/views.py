@@ -1,13 +1,15 @@
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, get_user_model
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, CreateView
-from django.contrib.auth.models import User
+from django.views.generic import ListView
 from django.core.mail import send_mail
-from .utils import *
+from django.db.models import F
 
 from blog.forms import *
 from blog.models import *
-from django.db.models import F
+
+from jobscrapper.models import *
+from .utils import *
+User = get_user_model()
 
 
 def register(request):
@@ -16,16 +18,19 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            mail = send_mail(get_mail_subject(form.cleaned_data["username"]),
-                      get_mail_context(form.cleaned_data["username"], form.cleaned_data["email"],
-                                       form.cleaned_data["password1"]),
-                      "testsubj88@yandex.ru", ["sgrimj@gmail.com", form.cleaned_data["email"]],
-                      fail_silently=True)
-            if mail:
-                 return redirect("home")
-            else:
-                print("something got wrong")
+            slug = user.profile.slug
 
+            mail = send_mail(get_mail_subject(form.cleaned_data["username"]),
+                             get_mail_context(form.cleaned_data["username"], form.cleaned_data["email"],
+                                              form.cleaned_data["password1"]),
+                             "testsubj88@yandex.ru", ["sgrimj@gmail.com", form.cleaned_data["email"]],
+                             fail_silently=True)
+            # if mail:
+            #      return redirect("profile")
+            # else:
+            #     print("something got wrong")
+            return redirect("profile", slug)
+    # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     else:
         form = UserRegister()
 
@@ -45,7 +50,6 @@ def user_login(request):
             return redirect("home")
 
 
-
     else:
         form = UserLogin()
 
@@ -58,6 +62,62 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("login")
+
+
+def user_delete(request):
+    user = request.user
+    if request.method == "POST":
+        qs = User.objects.get(pk=user.pk)
+        qs.delete()
+    return redirect("home")
+
+
+@transaction.atomic
+def profile(request, slug):
+    template_name = 'blog/profile.html'
+    profile = get_object_or_404(Profile, slug=slug)
+
+    if request.method == 'POST':
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        # request.FILES for files in form
+
+        if profile_form.is_valid():
+            temp_form = profile_form.save(commit=False)
+
+            # if profile city not in db then add
+            if temp_form.city:
+                # проверяем есть ли данный город в бд городов по hh
+                check_url = url_creator_hh(temp_form.city, "TEMP")
+
+                if check_url == "Такой город не поддерживается":
+                    temp_form.city = temp_form.city + ": временно не поддерживается"
+                else:
+                    check_city = normalizer_bd(profile_form.instance.city)
+                    city = City.objects.filter(name=check_city)
+                    if not city:
+                        temp = City(name=check_city)
+                        temp.save()
+
+            # if profile occupation not in db then add
+            if temp_form.occupation:
+                check_occupation = normalizer_bd(profile_form.instance.occupation)
+                occupation = Occupation.objects.filter(name=check_occupation)
+                if not occupation:
+                    temp = Occupation(name=check_occupation)
+                    temp.save()
+
+
+            temp_form.save()
+
+            return redirect("profile", slug=slug)
+    else:
+        profile_form = ProfileForm(instance=profile)
+
+    context = {'profile': profile,
+               'form': profile_form,
+               }
+
+    return render(request, template_name, context)
 
 
 class Home(ListView):
@@ -107,12 +167,12 @@ class PostsByTag(ListView):
 def single_post(request, slug):
     template_name = 'blog/single.html'
     post = get_object_or_404(Post, slug=slug)
-    comments = post.comments.filter(active=True)
+    comments = post.comments.filter(active=True).select_related("username")  # reduce SQL queries
     new_comment = None
     post.views = F("views") + 1
     post.save()
     post.refresh_from_db()
-    # Comment posted
+    # Comments
     if request.method == 'POST':
         comment_form = CommentsForm(data=request.POST)
         if comment_form.is_valid():
@@ -123,7 +183,11 @@ def single_post(request, slug):
             # Assign the current post to the comment
             new_comment.post = post
             # Save the comment to the database
-            new_comment.save()
+            if request.user.is_staff:
+                new_comment.active = True
+                new_comment.save()
+            else:
+                new_comment.save()
     else:
         comment_form = CommentsForm()
 
@@ -131,27 +195,7 @@ def single_post(request, slug):
                'comments': comments,
                'new_comment': new_comment,
                'form': comment_form}
-
     return render(request, template_name, context)
-
-
-# class PersonalPage(DetailView):
-#     model = Post
-#     template_name = "blog/personal.html"
-#     context_object_name = "post"
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         self.object.views = F("views") + 1
-#         self.object.save()
-#         self.object.refresh_from_db()
-#         context["user"] = User.objects.get(pk=self.kwargs["pk"])
-#         return context
-#
-#     def get_queryset(self):
-#         user = User.objects.get(pk=self.kwargs["pk"])
-#         print(user.username)
-#         return Post.objects.filter(author=user.username, )
 
 
 class Search(ListView):
@@ -166,40 +210,3 @@ class Search(ListView):
         context = super().get_context_data(**kwargs)
         context["s"] = f"s={self.request.GET.get('s')}&"
         return context
-
-
-class AddComments(CreateView):
-    form_class = CommentsForm
-    template_name = "blog/single.html"
-
-    # def get_initial(self):
-    #     initial = super(AddComments, self).get_initial()
-    #     initial.update({"username": self.request.user.username})
-    #     return initial
-
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     prev_page = self.request.META.get('HTTP_REFERER')
-    #
-    #     context["s"] =
-    #     return context
-
-    def form_valid(self, form):
-        redirect = self.request.META.get('HTTP_REFERER')  # to previous page
-        if redirect:
-            redirect += "#comment"  # to anchor
-            self.success_url = redirect
-        return super(AddComments, self).form_valid(form)
-
-    # def form_invalid(self, form):                           not working -------fix later
-    #     print("form invalid")
-    #     print(super(AddComments, self).form_invalid(form))
-    #     redirect = self.request.META.get('HTTP_REFERER')  # to previous page
-    #     print(form)
-    #
-    #     if redirect:
-    #         redirect += "#comment"  # to anchor
-    #         self.unsuccess_url = redirect
-    #         print(redirect)
-    #
-    #     return super(AddComments, self).form_invalid(form)

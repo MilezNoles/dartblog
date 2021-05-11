@@ -2,7 +2,7 @@
 {% load static %}
 {% load sidebar %}
 {% load currency %}
-
+{% load cache %}
 
 {% block title%} {{post.title}} :: {{block.super}} {% endblock%}
 {% block content %}
@@ -62,11 +62,11 @@
                                     <li>
                                         <article class="comment">
                                             <header class="comment-author">
-                                                <img src="{% static 'img/author-1.jpg' %}" alt="">
+                                                <img src="/media/{{comment.username.profile.profile_picture}}" alt="">
                                             </header>
                                             <section class="comment-details">
                                                 <div class="author-name">
-                                                    <h5><a href="/">{{comment.username}}</a></h5>
+                                                    <h5><a href="{% url 'profile' comment.username.profile.slug %}">{{comment.username}}</a></h5>
                                                     <p>{{comment.created_at}}</p>
                                                 </div>
                                                 <div class="comment-body">
@@ -91,30 +91,33 @@
 
                             {%if request.user.is_authenticated %}
 
-                            {% if new_comment %}
-                            <div class="alert alert-success" role="alert">
-                                Your comment is awaiting moderation
-                            </div>
-                            {% else %}
-                            <h3 style="font-size:22px;">Leave a comment</h3>
-                            <form action="{{post.get_absolute_url}}#comment" method="post">
-                                {% csrf_token %}
-                                {{ form.non_field_errors }}
-                                <div class="name">
-                                    <h3 class="comments-username">Username: {{user.username}}</h3>
-                                    {{ form.username.errors }}
-                                    {{ form.username }}
-                                </div>
+                                {% if new_comment and not request.user.is_staff  %}
 
-                                <div class="comment">
+                                        <div class="alert alert-success" role="alert">
+                                            Your comment is awaiting moderation
+                                        </div>
+
+                                {% else %}
+                                <h3 style="font-size:22px;">Leave a comment</h3>
+                                <form action="{{post.get_absolute_url}}#comment" method="post">
+                                    {% csrf_token %}
+                                    {{ form.non_field_errors }}
+                                    <div class="name">
+                                        <h3 class="comments-username">Username: {{user.username}}</h3>
+                                        {{ form.username.errors }}
+                                        {{ form.username }}
+                                    </div>
+
+                                    <div class="comment">
                                     {{ form.comment.errors }}
                                     {{ form.comment }}
-                                </div>
-                                <div class="post">
-                                    <input type="submit" value="Post">
-                                </div>
-                            </form>
-                            {% endif %}
+                                    </div>
+                                    <div class="post">
+                                        <input type="submit" value="Post">
+                                    </div>
+                                </form>
+                                {% endif %}
+
 
                             {%else%}
                             <div class="d-flex">
@@ -129,9 +132,13 @@
 
                         </div>
                     </div>
+
+
                     <div class="col-md-4">
 
+                        {% cache 1300 currency %}
                         {% check_currency %}
+                        {% endcache %}
 
                         <div class="newsletter">
                             <h2 class="sidebar-title">Search</h2>
@@ -141,11 +148,12 @@
                             </form>
                         </div>
 
+                        {% cache 900 sidebar %}
                         {% get_popular 5 %}
 
 
                         {% get_tags %}
-
+                        {% endcache %}
 
 
 

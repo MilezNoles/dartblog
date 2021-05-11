@@ -9,17 +9,10 @@ from django.utils.text import slugify
 # from captcha.fields import CaptchaField
 
 
-# class ContactForm(forms.Form):
-#     subject = forms.CharField(label="Тема",
-#                               widget=forms.TextInput(attrs={'class': "form-control", }), )
-#     content = forms.CharField(label="Текст",
-#                               widget=forms.Textarea(attrs={'class': "form-control", 'rows': 5}), )
-#     captcha = CaptchaField()
-
-
 class UserLogin(AuthenticationForm):
-    username = forms.CharField(label="Username",
-                               widget=forms.TextInput(attrs={'class': "form-control", }), )
+    username = forms.CharField(label="Login",
+                               widget=forms.TextInput(attrs={'class': "form-control",
+                                                             "placeholder": "Username or Email"}), )
     password = forms.CharField(label="Password",
                                widget=forms.PasswordInput(attrs={'class': "form-control", }))
 
@@ -36,6 +29,12 @@ class UserRegister(UserCreationForm):
     password2 = forms.CharField(label="Confirm password",
                                 widget=forms.PasswordInput(attrs={'class': "form-control", }))
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("This email has been already used!")
+        return email
+
 
     class Meta:
         model = User
@@ -46,6 +45,19 @@ class UserRegister(UserCreationForm):
         #            "password2": forms.PasswordInput(attrs={'class': "form-control", }),
         #
         # } для UserCreationForm это поле работает не корректно, поэтому все переносим из меты в UserRegister
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["bio", "city","occupation", "profile_picture","send_email" ]
+        widgets = {"bio" : forms.Textarea(attrs={'class': "form-control", }),
+                   "city": forms.TextInput(attrs={'class': "form-control","placeholder":"это поле обязательно для сервиса поиска", }),
+                   "occupation": forms.TextInput(attrs={'class': "form-control","placeholder":"это поле обязательно для сервиса поиска", }),
+                   "send_email": forms.CheckboxInput(attrs={'class': "form-check-input",}),
+                   "profile_picture": forms.FileInput(attrs={'class': "form-control",}),
+
+        }
+
 
 
 class CommentsForm(forms.ModelForm):
