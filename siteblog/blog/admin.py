@@ -44,7 +44,7 @@ class PostAdmin(admin.ModelAdmin):
     list_editable = ("category","is_main",)
     list_filter = ("category","tags")
 
-    readonly_fields = ("views", "created_at", "get_photo","author" )  # поля которые будут только для чтения
+    readonly_fields = ("views", "created_at", "get_photo",)  # поля которые будут только для чтения
     fields =("title","slug", "category","tags","author", "content", "photo", "get_photo","views", "created_at","is_main")
 
 
