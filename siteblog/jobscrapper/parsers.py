@@ -83,69 +83,7 @@ def hh(url):
     return jobs, errors
 
 
-def superjob(url):
-    jobs = []
-    errors = []
-    base_url = "https://spb.superjob.ru"
-
-    resp = requests.get(url, headers=headers[randint(0, 3)])
-    if resp.status_code == 200:
-        soup = BS(resp.text, "html.parser")
-
-        no_new_jobs = soup.find("div", attrs={"class": "_1h3Zg _2dazi _2hCDz _2ZsgW _21a7u"})
-
-        if not no_new_jobs:
-
-            main_div = soup.find("div", attrs={"class": "_1ID8B"})
-            div_list = main_div.find_all("div", attrs={"class": "f-test-search-result-item"})
-
-            for div in div_list:
-
-                title = div.find("div", attrs={"class": "_1h3Zg _2rfUm _2hCDz _21a7u"})
-                if not title:
-                    continue
-
-                url_to_job = base_url + title.a["href"]
-
-                title = title.text
-
-                company = div.find("span", attrs={"class": "f-test-text-vacancy-item-company-name"}).text
-
-                description = div.find("span", attrs={"class": "_1h3Zg _38T7m e5P5i _2hCDz _2ZsgW _2SvHc"}).text
-
-                salary_check = div.find("span", attrs={"class": "f-test-text-company-item-salary"})
-                if salary_check:
-                    salary = salary_check.text
-                else:
-                    salary = "зп не указана"
-
-                jobs.append({
-                    "title": title,
-                    "url": url_to_job,
-                    "company": company,
-                    "description": description,
-                    "salary": salary,
-                })
-
-        else:
-            jobs.append({0: 0})
-            errors.append({
-                "url": url,
-                "title": "Page is empty",
-            })
-            return jobs, errors
-
-    else:
-        errors.append({
-            "url": url,
-            "title": "Page do not responsed",
-            "code": "resp.status_code",
-        })
-    return jobs, errors
-
-
 if __name__ == "__main__":
-    url = "https://spb.superjob.ru/vacancy/search/?keywords=Python&period=3&click_from=fastFilter"
     url2 = "https://hh.ru/search/vacancy?clusters=true&area=115&enable_snippets=true&search_period=1&salary=&st=searchVacancy&text=java"
     url3 = "https://spb.hh.ru/search/vacancy?search_period=1&clusters=true&area=2&text=Python&enable_snippets=true"
     url4 = "https://hh.ru/search/vacancy?clusters=true&area=219&enable_snippets=true&search_period=1&salary=&st=searchVacancy&text=java+senior"

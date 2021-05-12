@@ -22,7 +22,7 @@ def url_creator_hh(city:str, occupation:str):
     with codecs.open(cities_path, "r", "utf-8") as f:
         for line in f:
             if city in line:
-                city_code = line.split(":")[1].strip("',\n")
+                city_code = line.split(":")[1].strip("',\r\n")
 
     if not city_code:
         return "Такой город не поддерживается"

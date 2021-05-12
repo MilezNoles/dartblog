@@ -80,3 +80,4 @@ if qs_err.exists():
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(content, "text/html")
     msg.send()
+
