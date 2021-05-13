@@ -1,6 +1,6 @@
 import os,sys
 import django
-
+import datetime as dt
 
 proj = os.path.dirname(os.path.abspath("manage.py"))
 sys.path.append(proj)
@@ -58,7 +58,7 @@ if errors:
     er = Errors(data=errors)
     er.save()
 
-# with codecs.open("jobs.txt","w+", "utf-8") as f:
-#     f.write(str(jobs))
-# with codecs.open("errors.txt","w+", "utf-8") as f:
-#     f.write(str(errors))
+
+ten_days_ago = dt.date.today() - dt.timedelta(10)
+Vacancy.objects.filter(timestamp__lte=ten_days_ago).delete()
+

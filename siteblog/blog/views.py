@@ -3,14 +3,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView
 from django.core.mail import send_mail
 from django.db.models import F
+from django.core.mail import EmailMultiAlternatives
 
+from siteblog.settings import EMAIL_HOST_USER
 from blog.forms import *
 from blog.models import *
 
 from jobscrapper.models import *
 from .utils import *
-User = get_user_model()
 
+User = get_user_model()
+from_email = EMAIL_HOST_USER
 
 def register(request):
     if request.method == "POST":
@@ -20,11 +23,20 @@ def register(request):
             login(request, user)
             slug = user.profile.slug
 
-            mail = send_mail(get_mail_subject(form.cleaned_data["username"]),
-                             get_mail_context(form.cleaned_data["username"], form.cleaned_data["email"],
-                                              form.cleaned_data["password1"]),
-                             "testsubj88@yandex.ru", ["sgrimj@gmail.com", form.cleaned_data["email"]],
-                             fail_silently=True)
+            # mail = send_mail(get_mail_subject(form.cleaned_data["username"]),
+            #                  get_mail_context(form.cleaned_data["username"], form.cleaned_data["email"],
+            #                                   form.cleaned_data["password1"]),
+            #                  "testsubj88@yandex.ru", ["sgrimj@gmail.com", form.cleaned_data["email"]],
+            #                  fail_silently=True)
+
+            subject = get_mail_subject(form.cleaned_data["username"])
+            text_content = "Регистрация"
+            to = ["sgrimj@gmail.com", form.cleaned_data["email"]]
+            content = get_mail_context(form.cleaned_data["username"], form.cleaned_data["email"],
+                                              form.cleaned_data["password1"])
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [*to])
+            msg.attach_alternative(content, "text/html")
+            msg.send()
             # if mail:
             #      return redirect("profile")
             # else:
