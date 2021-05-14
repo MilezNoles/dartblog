@@ -1,5 +1,6 @@
 from django.contrib.auth import login, logout, get_user_model
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from django.core.mail import send_mail
 from django.db.models import F
@@ -222,3 +223,15 @@ class Search(ListView):
         context = super().get_context_data(**kwargs)
         context["s"] = f"s={self.request.GET.get('s')}&"
         return context
+
+@csrf_exempt
+def tg_bot(request):
+    if request.method == 'GET':
+        resp = request.body
+        print(resp)
+        pass
+    if request.method == 'POST':
+        resp = request.body
+        print(resp)
+        pass
+    return render(request, 'blog/bot.html')

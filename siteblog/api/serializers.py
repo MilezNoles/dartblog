@@ -1,28 +1,25 @@
-
-from rest_framework.serializers import IntegerField,EmailField,Serializer,ModelSerializer,\
-    ImageField, HyperlinkedIdentityField,SlugRelatedField, SerializerMethodField, ValidationError
+from rest_framework.serializers import IntegerField, EmailField, Serializer, ModelSerializer, \
+    ImageField, HyperlinkedIdentityField, SlugRelatedField, SerializerMethodField, ValidationError
 from django.contrib.auth import get_user_model
-from blog.models import Post
 from django.contrib.auth.hashers import make_password
 
+from blog.models import Post
+from jobscrapper.models import City, Occupation, Vacancy
 
 
 class UserSerializer(ModelSerializer):
-    email = EmailField(max_length=255, required=True,)
-
-
+    email = EmailField(max_length=255, required=True, )
 
     class Meta:
         model = get_user_model()
         queryset = model.objects.all()
-        fields = ("id", "username","email", "password", "is_superuser")
-        extra_kwargs = {"password": {"write_only": True}}  #for user password
-
+        fields = ("id", "username", "email", "password", "is_superuser")
+        extra_kwargs = {"password": {"write_only": True}}  # for user password
 
     def create(self, validated_data):
         user = self.Meta.model(**validated_data)
         user.password = make_password(user.password)
-        #temporary email handler
+        # temporary email handler
         users = self.Meta.queryset
         lower_email = user.email.lower()
         if users.filter(email__iexact=lower_email).exists():
@@ -30,10 +27,10 @@ class UserSerializer(ModelSerializer):
 
         user.save()
         return user
-        
+
     def update(self, instance, validated_data):
         instance.set_password(validated_data.pop("password", ""))
-        #temporary email handler
+        # temporary email handler
         user = self.Meta.model(**validated_data)
         users = self.Meta.queryset
         lower_email = user.email.lower()
@@ -47,21 +44,19 @@ class UserSerializer(ModelSerializer):
     #     if users.filter(email__iexact=lower_email).exists():
     #         raise ValidationError("This email already exists")
     #     return lower_email
-        
-        
+
 
 class PostSerializer(ModelSerializer):
-    author = SerializerMethodField(read_only=True)       # set read only
     views = SerializerMethodField(read_only=True)
     slug = SerializerMethodField(read_only=True)
 
-    def get_author(self,obj):
+    def get_author(self, obj):
         return obj.author.username
 
-    def get_views(self,obj):
+    def get_views(self, obj):
         return obj.views
 
-    def get_slug(self,obj):
+    def get_slug(self, obj):
         return obj.slug
 
     class Meta:
@@ -69,16 +64,30 @@ class PostSerializer(ModelSerializer):
         fields = "__all__"
 
 
-class ThinPostSerializer(ModelSerializer):   #for shorter view
-    url = HyperlinkedIdentityField(view_name="posts-detail", lookup_field="slug")     #for urls in api view page
+class ThinPostSerializer(ModelSerializer):  # for shorter view
+    url = HyperlinkedIdentityField(view_name="posts-detail", lookup_field="slug")  # for urls in api view page
+
     class Meta:
         model = Post
         fields = ("id", "title", "url")
 
 
+class CitySerializer(ModelSerializer):
+    class Meta:
+        model = City
+        fields = ("name", "slug")
 
 
+class OccupationSerializer(ModelSerializer):
+    class Meta:
+        model = Occupation
+        fields = ("name", "slug")
 
+
+class VacancySerializer(ModelSerializer):
+    class Meta:
+        model = Vacancy
+        fields = "__all__"
 
 # class PostSerializer(Serializer):
 #     id = IntegerField(read_only=True)
@@ -98,4 +107,3 @@ class ThinPostSerializer(ModelSerializer):   #for shorter view
 #         instance.photo = validated_data.get("photo", instance.photo)
 #         instance.save()
 #         return instance
-
