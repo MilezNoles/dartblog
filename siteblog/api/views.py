@@ -6,9 +6,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from slugify import slugify
 
-from blog.models import Post
+from blog.models import Post, Profile
 from api.serializers import PostSerializer, ThinPostSerializer, UserSerializer, CitySerializer, OccupationSerializer, \
-    VacancySerializer
+    VacancySerializer, ProfileSerializer
 from jobscrapper.models import City, Occupation, Vacancy
 from .permissions import IsAuthorOrReadOnly
 
@@ -78,3 +78,8 @@ class VacancyViewSet(ModelViewSet):
 
         self.queryset = qs
         return self.queryset
+
+class ProfileViewSet(ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)

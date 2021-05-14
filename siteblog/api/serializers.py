@@ -3,7 +3,7 @@ from rest_framework.serializers import IntegerField, EmailField, Serializer, Mod
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 
-from blog.models import Post
+from blog.models import Post, Profile
 from jobscrapper.models import City, Occupation, Vacancy
 
 
@@ -89,6 +89,11 @@ class VacancySerializer(ModelSerializer):
         model = Vacancy
         fields = "__all__"
 
+
+class ProfileSerializer(ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ("url_for_hh", "city", "occupation")
 # class PostSerializer(Serializer):
 #     id = IntegerField(read_only=True)
 #     title = CharField(max_length=255,)

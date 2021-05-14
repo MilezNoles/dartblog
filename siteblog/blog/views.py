@@ -224,14 +224,14 @@ class Search(ListView):
         context["s"] = f"s={self.request.GET.get('s')}&"
         return context
 
-@csrf_exempt
-def tg_bot(request):
-    if request.method == 'GET':
-        resp = request.body
-        print(resp)
-        pass
-    if request.method == 'POST':
-        resp = request.body
-        print(resp)
-        pass
-    return render(request, 'blog/bot.html')
+# @csrf_exempt
+# def tg_bot(request):
+#     if request.method == 'GET':
+#         resp = request.body
+#         print(resp)
+#         pass
+#     if request.method == 'POST':
+#         resp = request.body
+#         print(resp)
+#         pass
+#     return render(request, 'blog/bot.html')
