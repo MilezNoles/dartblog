@@ -159,3 +159,96 @@ class Comments(models.Model):
 
     def __str__(self):
         return 'Comment {} by {}'.format(self.comment, self.username)
+
+
+class Catalog(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=255, verbose_name="name", )
+    group_id = models.ForeignKey("Group", null=True, blank=True, on_delete=models.SET_NULL)
+    brand_id = models.ForeignKey("Brand", null=True, blank=True, on_delete=models.SET_NULL)
+    ei = models.CharField(max_length=255, verbose_name="ei", )
+    price = models.CharField(max_length=255, verbose_name="price", )
+    price_old = models.CharField(max_length=255, verbose_name="price_old", )
+    ksales = models.CharField(max_length=255, verbose_name="ksales", )
+    pVAT = models.CharField(max_length=255, verbose_name="pVAT", )
+
+    def __str__(self):
+        return self.name or ''
+
+    class Meta:
+        verbose_name = "Catalog"
+        verbose_name_plural = "Catalog"
+
+
+class Brand(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=255, verbose_name="name", null=True, blank=True,)
+    child = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name or ''
+
+    class Meta:
+        verbose_name = "Brand"
+        verbose_name_plural = "Brand"
+
+
+class Group(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=255, verbose_name="name", )
+    level = models.CharField(max_length=255, verbose_name="level", )
+    child = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name or ''
+
+    class Meta:
+        verbose_name = "Group"
+        verbose_name_plural = "Group"
+
+
+class People(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=255, verbose_name="name", )
+    surname = models.CharField(max_length=255, verbose_name="surname",null=True, blank=True, )
+    fname = models.CharField(max_length=255, verbose_name="fname",null=True, blank=True, )
+    type = models.CharField(max_length=255, verbose_name="type", )
+    birthday = models.CharField(max_length=255, verbose_name="birthday", )
+    discont = models.CharField(max_length=255, verbose_name="discont", )
+    telephone = models.CharField(max_length=255, verbose_name="telephone", null=True, blank=True,)
+
+    def __str__(self):
+        return self.name or ''
+
+    class Meta:
+        verbose_name = "People"
+        verbose_name_plural = "People"
+
+
+class Shops(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=255, verbose_name="name", )
+    address = models.CharField(max_length=255, verbose_name="address", )
+    city = models.CharField(max_length=255, verbose_name="city", )
+    timestart = models.CharField(max_length=255, verbose_name="timestart", )
+    timefinish = models.CharField(max_length=255, verbose_name="timefinish", )
+    activefororder = models.CharField(max_length=255, verbose_name="activefororder", )
+
+    def __str__(self):
+        return self.name or ''
+
+    class Meta:
+        verbose_name = "Shops"
+        verbose_name_plural = "Shops"
+
+
+class Shcode(models.Model):
+    catalog_id = models.CharField(max_length=255, null=True, blank=True,)
+    shcode = models.CharField(max_length=255, verbose_name="shcode", null=True, blank=True,)
+
+    def __str__(self):
+        return self.shcode or ''
+
+    class Meta:
+        verbose_name = "Shcode"
+        verbose_name_plural = "Shcode"
